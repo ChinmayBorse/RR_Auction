@@ -5,8 +5,8 @@ import numpy as np
 import plotly.express as px
 
 st.set_page_config(
-    page_title="Rajasthan Royals | 2027 Auction War Room",
-    page_icon="⚡",
+    page_title="Rajasthan Royals | IPL 2027 Auction Scouting",
+    page_icon="🏏",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -14,222 +14,179 @@ st.set_page_config(
 st.markdown("""
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
-    :root { color-scheme: dark !important; }
-html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-        background: linear-gradient(145deg, #060B14 0%, #0A1324 45%, #0F1A30 100%) !important;
-        color: #F8FAFC !important;
-        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    :root { color-scheme: light !important; }
+
+    html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        background-color: #F4F6FA !important;
+        color: #111827 !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     }
+
     .stApp p, .stApp label, .stApp li,
     [data-testid="stMarkdownContainer"] p, [data-testid="stWidgetLabel"] p {
-        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     }
+
     [data-testid="stIconMaterial"] {
         font-family: 'Material Symbols Rounded' !important;
     }
-    }
-    h1, h2, h3, h4, .rr-title, .section-title, .scout-name, .quota-title {
-        font-family: 'Space Grotesk', -apple-system, sans-serif !important;
+
+    h1, h2, h3, h4, .page-title, .card-name, .table-head-title {
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
         letter-spacing: -0.02em;
+        color: #17316B !important;
     }
-    .mono-font, .card-value, .rr-pill, .scout-metric-val, .quota-chip {
+
+    .mono, .kpi-number, .stat-val {
         font-family: 'JetBrains Mono', monospace !important;
         font-variant-numeric: tabular-nums;
     }
-    .block-container {
-        padding-top: 3.2rem !important;
-        padding-bottom: 2.6rem !important;
-        padding-left: 2.2rem !important;
-        padding-right: 2.2rem !important;
-        max-width: 1420px !important;
-    }
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #070D18; }
-    ::-webkit-scrollbar-thumb { background: #1C2D4A; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #2A436D; }
 
-    .rr-header {
-        background: linear-gradient(135deg, rgba(14, 25, 48, 0.96) 0%, rgba(20, 36, 68, 0.92) 60%, rgba(55, 14, 46, 0.78) 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-left: 4px solid #E8127D !important;
-        border-radius: 12px !important;
-        padding: 22px 26px !important;
-        margin-bottom: 20px !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    .block-container {
+        padding-top: 2.2rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 2.1rem !important;
+        padding-right: 2.1rem !important;
+        max-width: 1400px !important;
     }
-    .rr-header-top {
+
+    /* Polished Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0 !important;
+    }
+    section[data-testid="stSidebar"] > div {
+        padding-top: 1.5rem !important;
+        padding-left: 1.2rem !important;
+        padding-right: 1.2rem !important;
+    }
+    .sb-title {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #17316B !important;
+        padding-bottom: 10px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    /* Royals Masthead */
+    .rr-banner {
+        background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFD 100%);
+        border: 1px solid #E2E8F0;
+        border-top: 4px solid #17316B;
+        border-radius: 10px;
+        padding: 22px 26px;
+        margin-bottom: 18px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+    }
+    .rr-banner-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
         flex-wrap: wrap;
         gap: 8px;
+        margin-bottom: 6px;
     }
-    .rr-crest {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: 'Space Grotesk', sans-serif !important;
-        font-size: 11px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase;
-        letter-spacing: 1.6px;
-        color: #E8127D !important;
+    .rr-team-line {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #E51A7A;
+        letter-spacing: 0.06em;
     }
-    .rr-status-beacon {
-        display: inline-flex;
+    .sample-pill {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 11px;
+        color: #17316B;
+        background: #EEF2FF;
+        border: 1px solid #DBEAFE;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+    .page-title {
+        font-size: 25px !important;
+        font-weight: 800 !important;
+        color: #17316B !important;
+        margin: 0 0 6px 0 !important;
+        line-height: 1.2 !important;
+    }
+    .page-lead {
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.5;
+        margin: 0;
+        max-width: 920px;
+    }
+    .squad-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-top: 15px;
+        padding-top: 13px;
+        border-top: 1px solid #E2E8F0;
+        font-size: 12.5px;
+        color: #475569;
+    }
+    .squad-strip strong {
+        color: #17316B;
+        font-weight: 700;
+    }
+
+    /* Restored 4 Hero Stat Cards with Subtle Elevation */
+    .stat-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 17px 19px;
+        height: 100%;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(23, 49, 107, 0.07);
+    }
+    .stat-card-pink { border-top: 3px solid #E51A7A; }
+    .stat-card-blue { border-top: 3px solid #17316B; }
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
         align-items: center;
         gap: 6px;
-        padding: 4px 11px;
-        border-radius: 20px;
-        background: rgba(232, 18, 125, 0.14) !important;
-        border: 1px solid rgba(232, 18, 125, 0.35) !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 10.5px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.8px;
-        color: #FF5EA6 !important;
+        margin-bottom: 8px;
     }
-    .rr-status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: #E8127D;
-        box-shadow: 0 0 8px #E8127D;
-        display: inline-block;
-    }
-    .rr-title {
-        font-size: 27px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        margin: 0 !important;
-        line-height: 1.15 !important;
-    }
-    .rr-subtitle {
-        font-size: 13.5px !important;
-        color: #94A3B8 !important;
-        margin-top: 6px;
-        line-height: 1.45;
-    }
-    .rr-strip {
-        display: flex;
-        gap: 8px;
-        margin-top: 14px;
-        flex-wrap: wrap;
-    }
-    .rr-pill {
-        font-size: 11px !important;
-        background: rgba(14, 25, 48, 0.85) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        padding: 4px 10px;
-        border-radius: 6px;
-        color: #CBD5E1 !important;
-    }
-    .rr-pill strong { color: #FFFFFF !important; }
-    .rr-pill-accent {
-        border-color: rgba(232, 18, 125, 0.45) !important;
-        color: #FF4D9E !important;
-        background: rgba(232, 18, 125, 0.12) !important;
-    }
-    .rr-pill-gold {
-        border-color: rgba(212, 175, 55, 0.45) !important;
-        color: #F1D278 !important;
-        background: rgba(212, 175, 55, 0.12) !important;
-    }
-    .analyst-card {
-        background: linear-gradient(180deg, rgba(17, 30, 56, 0.92) 0%, rgba(10, 19, 38, 0.98) 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 10px !important;
-        padding: 16px 18px !important;
-        height: 100%;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-        transition: all 0.25s ease;
-    }
-    .analyst-card:hover {
-        border-color: rgba(232, 18, 125, 0.4) !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-    }
-    .card-eyebrow {
-        font-size: 11px !important;
-        font-weight: 600 !important;
+    .stat-label {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #64748B;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: #94A3B8 !important;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        letter-spacing: 0.03em;
     }
-    .card-value {
-        font-size: 24px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        margin: 8px 0 4px 0;
-        letter-spacing: -0.02em;
+    .kpi-number {
+        font-size: 25px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.15;
+        margin-bottom: 6px;
     }
-    .card-sub {
-        font-size: 12px !important;
-        color: #94A3B8 !important;
-        line-height: 1.4;
+    .stat-note {
+        font-size: 12.5px;
+        color: #475569;
+        line-height: 1.35;
     }
-    .pill-tag-pink {
-        background: linear-gradient(90deg, rgba(232, 18, 125, 0.22) 0%, rgba(232, 18, 125, 0.08) 100%) !important;
-        border: 1px solid rgba(232, 18, 125, 0.4) !important;
-        color: #FF5EA6 !important;
-        padding: 2px 7px;
-        border-radius: 4px;
-        font-weight: 600 !important;
-        font-size: 11px !important;
-    }
-    .pill-tag-gold {
-        background: linear-gradient(90deg, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
-        border: 1px solid rgba(212, 175, 55, 0.4) !important;
-        color: #E5C368 !important;
-        padding: 2px 7px;
-        border-radius: 4px;
-        font-weight: 600 !important;
-        font-size: 11px !important;
-    }
-    .pill-tag-blue {
-        background: linear-gradient(90deg, rgba(37, 99, 235, 0.22) 0%, rgba(37, 99, 235, 0.08) 100%) !important;
-        border: 1px solid rgba(37, 99, 235, 0.4) !important;
-        color: #93C5FD !important;
-        padding: 2px 7px;
-        border-radius: 4px;
-        font-weight: 600 !important;
-        font-size: 11px !important;
-    }
-    .section-title {
-        font-size: 18px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        margin-top: 6px;
-        margin-bottom: 10px;
-    }
-    div[role="radiogroup"] {
-        gap: 10px !important;
-        margin-bottom: 12px !important;
-    }
-    div[role="radiogroup"] label {
-        background: rgba(17, 30, 56, 0.85) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 6px !important;
-        padding: 5px 12px !important;
-    }
-    div[role="radiogroup"] label p {
-        color: #E2E8F0 !important;
-        font-weight: 600 !important;
-        font-size: 12.5px !important;
-    }
+
+    /* Navigation Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
-        background: rgba(10, 19, 38, 0.9) !important;
-        padding: 5px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        margin-bottom: 1rem;
+        background: #E2E8F0;
+        padding: 4px;
+        border-radius: 9px;
+        margin-top: 18px;
+        margin-bottom: 1.2rem;
     }
     .stTabs [data-baseweb="tab"] {
         height: 38px;
@@ -237,132 +194,116 @@ html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"]
         padding: 0 18px;
         font-size: 13px !important;
         font-weight: 600 !important;
-        color: #94A3B8 !important;
+        color: #475569 !important;
+        background: transparent !important;
         border: none !important;
         transition: all 0.15s ease;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #F8FAFC !important;
-        background: rgba(255, 255, 255, 0.05) !important;
+        color: #17316B !important;
+        background: rgba(255, 255, 255, 0.55) !important;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #E8127D 0%, #B80F63 100%) !important;
+        background: #17316B !important;
         color: #FFFFFF !important;
-        box-shadow: 0 4px 14px rgba(232, 18, 125, 0.35) !important;
-        border: none !important;
+        box-shadow: 0 1px 3px rgba(23, 49, 107, 0.25) !important;
     }
     .stTabs [data-baseweb="tab-border"], .stTabs [data-baseweb="tab-highlight"] {
         display: none !important;
     }
-    div[data-testid="stDataFrame"] {
-        border: 1px solid rgba(255, 255, 255, 0.09) !important;
-        border-radius: 10px !important;
-        background: rgba(11, 20, 38, 0.95) !important;
-        overflow: hidden;
-    }
-    section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #070D18 0%, #0A1426 100%) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-    }
-    section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3, section[data-testid="stSidebar"] label p {
-        color: #F8FAFC !important;
-    }
-    .scout-card {
-        background: linear-gradient(180deg, rgba(17, 30, 56, 0.88) 0%, rgba(10, 19, 38, 0.96) 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.09) !important;
-        border-radius: 10px !important;
-        padding: 14px 16px !important;
-        margin-top: 8px;
-        margin-bottom: 6px;
-    }
-    .scout-header {
+
+    /* Section Header Bar Above Tables */
+    .table-head-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
     }
-    .scout-name {
-        font-size: 15px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
+    .table-head-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: #17316B !important;
     }
-    .scout-meta {
-        font-size: 11.5px !important;
-        color: #94A3B8 !important;
+
+    /* Player Spotlight Cards */
+    .panel-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 18px 20px;
+        height: 100%;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
-    .scout-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        margin-top: 8px;
-    }
-    .scout-metric {
-        background: rgba(6, 12, 24, 0.78) !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-radius: 6px;
-        padding: 6px 10px;
-    }
-    .scout-metric-label {
-        font-size: 9.5px !important;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: #94A3B8 !important;
-    }
-    .scout-metric-val {
-        font-size: 14px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-    }
-    .quota-box {
-        background: linear-gradient(180deg, rgba(16, 28, 52, 0.9) 0%, rgba(10, 19, 38, 0.98) 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.09) !important;
-        border-radius: 10px !important;
-        padding: 12px 16px !important;
-        margin-bottom: 16px;
+    .card-top {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+    .card-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #17316B !important;
+    }
+    .card-role {
+        font-size: 12px;
+        color: #64748B;
+        margin-top: 2px;
+    }
+    .tag-pink {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 5px;
+        background: #FDF2F8;
+        color: #BE185D;
+        border: 1px solid #FBCFE8;
+    }
+    .tag-navy {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 5px;
+        background: #EFF6FF;
+        color: #17316B;
+        border: 1px solid #BFDBFE;
+    }
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
     }
-    .quota-title {
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    .stat-cell {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 7px;
+        padding: 9px 11px;
     }
-    .quota-chips {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
+    .stat-lbl {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: #64748B;
     }
-    .quota-chip {
-        font-size: 11px !important;
-        padding: 4px 10px;
-        border-radius: 6px;
-        background: rgba(14, 25, 48, 0.85) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        color: #CBD5E1 !important;
+    .stat-val {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+        margin-top: 3px;
     }
-    .quota-chip-locked {
-        border-color: rgba(232, 18, 125, 0.45) !important;
-        color: #FF5EA6 !important;
-        background: rgba(232, 18, 125, 0.12) !important;
-    }
-    .quota-chip-target {
-        border-color: rgba(212, 175, 55, 0.45) !important;
-        color: #F1D278 !important;
-        background: rgba(212, 175, 55, 0.12) !important;
+
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 10px !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 1. ONE-TIME INGESTION & VECTORIZED PRE-COMPUTATION
+# 1. FAST PARQUET-BACKED ENGINE
 # ---------------------------------------------------------
-@st.cache_resource(show_spinner="Initializing scouting engine...")
+@st.cache_resource(show_spinner="Loading ball-by-ball dataset...")
 def load_base_engine():
     cache_bbb = ".cache_bbb_m.parquet"
     cache_meta = ".cache_player_meta.parquet"
@@ -453,7 +394,6 @@ def load_base_engine():
     bbb_m['season_year'] = bbb_m['season'].astype(str).str[:4].astype('int16')
     recency_wt = np.where(bbb_m['season_year'] >= 2025, 1.25, np.where(bbb_m['season_year'] == 2024, 1.10, 0.85)).astype('float32')
 
-    # Pre-compute vectorized weighted columns & boolean flags (eliminates slow .apply(lambda) later)
     bbb_m['is_dot_bat'] = (bbb_m['total_runs'] == 0) & bbb_m['is_batter_ball']
     bbb_m['bowler_runs'] = np.where(bbb_m['extras_type'].isin(['byes', 'legbyes', 'Penalty']), 0, bbb_m['total_runs']).astype('int16')
     bbb_m['is_dot_bowl'] = (bbb_m['bowler_runs'] == 0) & bbb_m['is_legal_ball']
@@ -465,7 +405,6 @@ def load_base_engine():
     bbb_m['rec_bowl_balls'] = (bbb_m['is_legal_ball'] * recency_wt).astype('float32')
     bbb_m['rec_bowl_wkts'] = (bbb_m['is_bowler_wicket'] * recency_wt).astype('float32')
 
-    # Drop intermediate columns not needed in UI to minimize RAM footprint
     keep_cols = [
         'match_id', 'comp_id', 'innings', 'overid', 'phase', 'season_year',
         'batting_team_id', 'bowling_team_id', 'striker_id', 'striker_name',
@@ -477,7 +416,6 @@ def load_base_engine():
     ]
     bbb_m = bbb_m[keep_cols]
 
-    # Player Metadata
     latest_comp = mapping.merge(comps[['comp_id', 'season']], on='comp_id').sort_values(['season', 'comp_id'], ascending=False)
     latest_team = latest_comp.drop_duplicates('player_id')[['player_id', 'team_name']].rename(columns={'team_name': 'latest_team'})
     ipl26_roster = mapping[mapping['comp_id'] == 3298][['player_id', 'team_name']].rename(columns={'team_name': 'ipl_2026_team'})
@@ -564,7 +502,6 @@ def compute_leaderboards(_bbb_m, _player_meta, dpi_threshold, min_balls, origin_
     tot_count = len(df_s)
     hp_pct = (hp_count / tot_count * 100) if tot_count > 0 else 0.0
 
-    # Fast vectorized batting aggregations
     overall_bat = df_s.groupby('striker_id').agg(tot_balls=('is_batter_ball', 'sum'), tot_runs=('runs', 'sum'))
     overall_bat['overall_sr'] = overall_bat['tot_runs'] / overall_bat['tot_balls'].replace(0, np.nan) * 100
 
@@ -604,7 +541,6 @@ def compute_leaderboards(_bbb_m, _player_meta, dpi_threshold, min_balls, origin_
         0.10 * minmax(bat_qual['sr_retention'].clip(80, 120))
     ) * 100
 
-    # Fast vectorized bowling aggregations
     overall_bowl = df_s.groupby('bowler_id').agg(tot_balls=('is_legal_ball', 'sum'), tot_runs=('bowler_runs', 'sum'))
     overall_bowl['overall_econ'] = overall_bowl['tot_runs'] / (overall_bowl['tot_balls'] / 6).replace(0, np.nan)
 
@@ -651,15 +587,23 @@ def compute_leaderboards(_bbb_m, _player_meta, dpi_threshold, min_balls, origin_
 bbb_m, player_meta = load_base_engine()
 rr_bat26, rr_bowl26, bat_p, bowl_p = get_ipl26_audit(bbb_m)
 
+# ---------------------------------------------------------
+# 2. OPEN SIDEBAR (NO DROPDOWNS — DIRECT CONTROLS)
+# ---------------------------------------------------------
 with st.sidebar:
-    st.subheader("Scouting Controls")
+    st.markdown('<div class="sb-title">Scouting Controls</div>', unsafe_allow_html=True)
+
+    player_search = st.text_input("Search Player", placeholder="e.g. Shashank, Bosch, Archer")
+
     dpi_threshold = st.slider("Min Pressure Index (DPI)", min_value=20, max_value=70, value=30, step=5)
     min_balls = st.slider("Min High-Pressure Balls", min_value=60, max_value=300, value=120, step=20)
+
     origin_filter = st.multiselect(
         "IPL Eligibility Pool",
         options=['India', 'Overseas (IPL-Eligible)', 'Pakistan (Ineligible)'],
         default=['India', 'Overseas (IPL-Eligible)']
     )
+
     all_seasons = sorted(bbb_m['season_year'].unique().tolist())
     season_range = st.multiselect(
         "Seasons Scope",
@@ -671,14 +615,14 @@ bat_qual, bowl_qual, dpi_dist, hp_balls, tot_balls, hp_pct = compute_leaderboard
     bbb_m, player_meta, dpi_threshold, min_balls, tuple(origin_filter), tuple(season_range)
 )
 
-def style_chart(fig, height=410):
+def style_chart(fig, height=370):
     fig.update_layout(
         height=height,
-        font=dict(family="DM Sans, sans-serif", size=12, color="#94A3B8"),
-        title_font=dict(family="Space Grotesk, sans-serif", size=14, color="#F8FAFC"),
-        plot_bgcolor="#0A1324",
-        paper_bgcolor="#0A1324",
-        margin=dict(l=26, r=22, t=50, b=30),
+        font=dict(family="Inter, sans-serif", size=12, color="#475569"),
+        title_font=dict(family="Plus Jakarta Sans, sans-serif", size=14.5, color="#17316B"),
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        margin=dict(l=24, r=20, t=50, b=28),
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -686,134 +630,218 @@ def style_chart(fig, height=410):
             xanchor="right",
             x=1,
             title=None,
-            font=dict(size=11, color="#94A3B8")
+            font=dict(size=11.5, color="#334155")
         ),
         xaxis=dict(
-            gridcolor="rgba(255, 255, 255, 0.06)",
-            zerolinecolor="rgba(255, 255, 255, 0.1)",
-            tickfont=dict(size=11, color="#94A3B8"),
-            title_font=dict(size=12, color="#CBD5E1")
+            gridcolor="#F1F5F9",
+            zerolinecolor="#CBD5E1",
+            tickfont=dict(size=11, color="#475569"),
+            title_font=dict(size=12, color="#334155")
         ),
         yaxis=dict(
-            gridcolor="rgba(255, 255, 255, 0.06)",
-            zerolinecolor="rgba(255, 255, 255, 0.1)",
-            tickfont=dict(size=11, color="#94A3B8"),
-            title_font=dict(size=12, color="#CBD5E1")
+            gridcolor="#F1F5F9",
+            zerolinecolor="#CBD5E1",
+            tickfont=dict(size=11, color="#475569"),
+            title_font=dict(size=12, color="#334155")
         ),
         hoverlabel=dict(
-            bgcolor="#0E192E",
-            bordercolor="rgba(232, 18, 125, 0.4)",
-            font=dict(family="DM Sans, sans-serif", size=12, color="#F8FAFC")
+            bgcolor="#17316B",
+            bordercolor="#17316B",
+            font=dict(family="Inter, sans-serif", size=12, color="#FFFFFF")
         )
     )
     return fig
 
-st.markdown("""
-<div class="rr-header">
-<div class="rr-header-top">
-<div class="rr-crest">
-<span>RAJASTHAN ROYALS</span>
+# ---------------------------------------------------------
+# 3. CLEAN ROYALS HEADER & RESTORED 4 HERO STAT CARDS
+# ---------------------------------------------------------
+st.markdown(f"""
+<div class="rr-banner">
+<div class="rr-banner-top">
+<span class="rr-team-line">RAJASTHAN ROYALS · PERFORMANCE ANALYSIS</span>
+<span class="sample-pill">Sample: {hp_balls:,} / {tot_balls:,} balls ({hp_pct:.1f}% DPI ≥ {dpi_threshold})</span>
 </div>
-<div class="rr-status-beacon">
-<span class="rr-status-dot"></span>
-ACTIVE SCOUTING ENGINE · 200,999 DELIVERIES
-</div>
-</div>
-<h1 class="rr-title">IPL 2027 Mega-Auction War Room</h1>
-<div class="rr-subtitle">
-Delivery-level leverage modeling isolating death-over execution, collapse mitigation, and steep run-chase resilience across 867 T20 matches (2022–2026).
-</div>
-<div class="rr-strip">
-<span class="rr-pill rr-pill-accent">PURSE: <strong>₹120.0 CR</strong></span>
-<span class="rr-pill">RETENTIONS: <strong>6 PLAYERS</strong></span>
-<span class="rr-pill">OVERSEAS SLOTS: <strong>2 VACANT (4 MAX)</strong></span>
-<span class="rr-pill rr-pill-gold">PRIMARY NEED: <strong>DEATH FINISHER & SEAM ENFORCER</strong></span>
+<h1 class="page-title">IPL 2027 Mega-Auction Scouting & Squad Plan</h1>
+<div class="squad-strip">
+<span>Purse: <strong>₹120.0 Cr</strong></span>
+<span>Retentions: <strong>6 Players</strong></span>
+<span>Overseas Slots: <strong>2 Retained, 2 Open</strong></span>
+<span>Target Roles: <strong>Indian Finisher (#5–6) & Seam All-Rounder</strong></span>
 </div>
 </div>
 """, unsafe_allow_html=True)
 
 k1, k2, k3, k4 = st.columns(4)
 with k1:
-    st.markdown(f"""
-<div class="analyst-card">
-<div class="card-eyebrow">
-<span>Leverage Sample</span>
-<span class="pill-tag-pink">DPI ≥ {dpi_threshold}</span>
+    st.markdown("""
+<div class="stat-card stat-card-pink">
+<div class="stat-top">
+<span class="stat-label">RR 2026 Death Batting</span>
+<span class="tag-pink">Overs 16–20</span>
 </div>
-<div class="card-value">{hp_balls:,} <span style="font-size:13px;color:#94A3B8;">balls</span></div>
-<div class="card-sub"><span style="color:#FF4D9E;font-weight:600;">{hp_pct:.1f}%</span> of {tot_balls:,} deliveries indexed</div>
+<div class="kpi-number">10.31 <span style="font-size:13px;font-weight:500;color:#64748B;">RPO</span></div>
+<div class="stat-note">-0.49 RPO behind league average (10.80)</div>
 </div>
 """, unsafe_allow_html=True)
 
 with k2:
     st.markdown("""
-<div class="analyst-card">
-<div class="card-eyebrow">
-<span>RR 2026 Death Batting</span>
-<span class="pill-tag-gold">Overs 16–20</span>
+<div class="stat-card stat-card-blue">
+<div class="stat-top">
+<span class="stat-label">RR Middle Dot-Ball Rate</span>
+<span class="tag-navy">Overs 7–15</span>
 </div>
-<div class="card-value">10.31 <span style="font-size:13px;color:#94A3B8;">RPO</span></div>
-<div class="card-sub"><span style="color:#E5C368;font-weight:600;">-0.49 RPO</span> vs league avg (10.80 benchmark)</div>
+<div class="kpi-number">25.6% <span style="font-size:13px;font-weight:500;color:#64748B;">dots</span></div>
+<div class="stat-note">-3.2% behind league average (28.8%)</div>
 </div>
 """, unsafe_allow_html=True)
 
 with k3:
     st.markdown("""
-<div class="analyst-card">
-<div class="card-eyebrow">
-<span>RR Middle Dot-Ball Deficit</span>
-<span class="pill-tag-blue">Overs 7–15</span>
+<div class="stat-card stat-card-pink">
+<div class="stat-top">
+<span class="stat-label">#1 Finisher Target (IND)</span>
+<span class="tag-pink">78.3 BPRS</span>
 </div>
-<div class="card-value">25.6% <span style="font-size:13px;color:#94A3B8;">dots</span></div>
-<div class="card-sub"><span style="color:#93C5FD;font-weight:600;">-3.2%</span> below 28.8% league middle containment</div>
+<div class="kpi-number">Shashank <span style="font-size:13px;font-weight:500;color:#64748B;">#5–6</span></div>
+<div class="stat-note">182.8 Pressure SR · 195.4 Death SR</div>
 </div>
 """, unsafe_allow_html=True)
 
 with k4:
     st.markdown("""
-<div class="analyst-card">
-<div class="card-eyebrow">
-<span>#1 Target Score</span>
-<span class="pill-tag-pink">Priority Target</span>
+<div class="stat-card stat-card-blue">
+<div class="stat-top">
+<span class="stat-label">#1 Seam Target (OS)</span>
+<span class="tag-navy">73.0 BWPRS</span>
 </div>
-<div class="card-value">78.3 <span style="font-size:13px;color:#94A3B8;">BPRS</span></div>
-<div class="card-sub">Shashank Singh · 182.8 HP SR · 195.4 Death SR</div>
+<div class="kpi-number">C. Bosch <span style="font-size:13px;font-weight:500;color:#64748B;">SA</span></div>
+<div class="stat-note">8.37 Pressure Econ · 49.7% Dot Balls</div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
-
+# ---------------------------------------------------------
+# 4. STRUCTURED 5-TAB WORKSPACE
+# ---------------------------------------------------------
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "01 · RR 2026 Diagnostic",
-    "02 · Batting Leverage (BPRS)",
-    "03 · Bowling Leverage (BWPRS)",
-    "04 · 2027 Blueprint & XII",
-    "05 · Model Architecture"
+    "1. 2027 Auction Blueprint & XII",
+    "2. RR 2026 Season Audit",
+    "3. Batting Leaderboard (BPRS)",
+    "4. Bowling Leaderboard (BWPRS)",
+    "5. Model & Data Notes"
 ])
 
 with tab1:
-    st.markdown('<div class="section-title">Rajasthan Royals · IPL 2026 Season Audit (9W – 7L)</div>', unsafe_allow_html=True)
+    c_left, c_right = st.columns([1.05, 1])
+    with c_left:
+        st.markdown('<div class="table-head-bar"><span class="table-head-title">Priority Auction Target Matrix</span><span class="tag-pink">7 Shortlisted Targets</span></div>', unsafe_allow_html=True)
+        targets_df = pd.DataFrame([
+            {"Tier": "Tier 1", "Player": "Shashank Singh", "Pool": "IND", "2026 Team": "PBKS", "Role": "Finisher (#5–6)", "Pressure Profile": "78.3 BPRS · 195.4 Death SR"},
+            {"Tier": "Tier 1", "Player": "Naman Dhir", "Pool": "IND", "2026 Team": "MI", "Role": "Finisher / Off-Spin", "Pressure Profile": "73.7 BPRS · 201.1 Pressure SR"},
+            {"Tier": "Tier 1", "Player": "Corbin Bosch", "Pool": "OS (SA)", "2026 Team": "MI", "Role": "Death Seam All-Rounder", "Pressure Profile": "73.0 BWPRS · 8.37 Econ · 49.7% Dots"},
+            {"Tier": "Tier 1", "Player": "Mujeeb Ur Rahman", "Pool": "OS (AFG)", "2026 Team": "Free Agent", "Role": "PP & Middle Spin", "Pressure Profile": "69.8 BWPRS · 7.76 Pressure Econ"},
+            {"Tier": "Backup", "Player": "Jamie Overton", "Pool": "OS (ENG)", "2026 Team": "CSK", "Role": "Death Pace / Hitter", "Pressure Profile": "67.3 BWPRS · 6.85 Death SR"},
+            {"Tier": "Backup", "Player": "Gurjapneet Singh", "Pool": "IND", "2026 Team": "CSK", "Role": "Left-Arm Seam", "Pressure Profile": "64.6 BWPRS · 8.88 Death Econ"},
+            {"Tier": "Backup", "Player": "Cooper Connolly", "Pool": "OS (AUS)", "2026 Team": "PBKS", "Role": "LHB Middle / SLA Spin", "Pressure Profile": "67.2 BPRS · 237.8 Death SR"}
+        ])
+        st.dataframe(targets_df, use_container_width=True, hide_index=True, height=295)
+
+    with c_right:
+        st.markdown('<div class="table-head-bar"><span class="table-head-title">Projected IPL 2027 Playing XII</span><span class="tag-navy">4 / 4 Overseas Slots</span></div>', unsafe_allow_html=True)
+        xii_df = pd.DataFrame([
+            {"#": 1, "Player": "Yashasvi Jaiswal", "Status": "Retained (IND)", "Role & 2026 Output": "LHB Opener · 427 runs @ 152.5 SR"},
+            {"#": 2, "Player": "Vaibhav Sooryavanshi", "Status": "Retained (IND)", "Role & 2026 Output": "LHB Opener · 776 runs @ 237.3 SR"},
+            {"#": 3, "Player": "Riyan Parag", "Status": "Retained (IND)", "Role & 2026 Output": "RHB Middle / Spin · 309 runs @ 157.7 SR"},
+            {"#": 4, "Player": "Dhruv Jurel (WK)", "Status": "Retained (IND)", "Role & 2026 Output": "RHB Keeper · 515 runs @ 154.7 SR"},
+            {"#": 5, "Player": "Naman Dhir", "Status": "Target (IND)", "Role & 2026 Output": "RHB Enforcer / Off-Spin · 201.1 Pressure SR"},
+            {"#": 6, "Player": "Shashank Singh", "Status": "Target (IND)", "Role & 2026 Output": "RHB Death Finisher · 195.4 Death SR"},
+            {"#": 7, "Player": "Donovan Ferreira", "Status": "Retained (OS #1)", "Role & 2026 Output": "RHB Power Hitter · 317 runs @ 179.1 SR"},
+            {"#": 8, "Player": "Ravindra Jadeja", "Status": "Retained (IND)", "Role & 2026 Output": "LHB / SLA Spin · 266 runs & 8.58 Econ"},
+            {"#": 9, "Player": "Corbin Bosch", "Status": "Target (OS #2)", "Role & 2026 Output": "Death Seam All-Rounder · 8.37 Pressure Econ"},
+            {"#": 10, "Player": "Jofra Archer", "Status": "Retained (OS #3)", "Role & 2026 Output": "Pace Spearhead · 25 Wkts @ 9.43 Econ"},
+            {"#": 11, "Player": "Ravi Bishnoi", "Status": "Retained (IND)", "Role & 2026 Output": "Leg-Break Spinner · 11 Wkts @ 9.96 Econ"},
+            {"#": 12, "Player": "Gurjapneet / Mujeeb", "Status": "Impact Sub (OS #4)", "Role & 2026 Output": "Left-Arm Seam or Mystery Spin Matchup"}
+        ])
+        st.dataframe(xii_df, use_container_width=True, hide_index=True, height=295)
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    upgrade_df = pd.DataFrame([
+        {"Slot": "Finishing Battery", "Player": "Shimron Hetmyer (RR 2026)", "Value": 113.0, "Status": "2026 Outgoing"},
+        {"Slot": "Finishing Battery", "Player": "Shashank Singh", "Value": 182.8, "Status": "2027 Target"},
+        {"Slot": "Finishing Battery", "Player": "Naman Dhir", "Value": 201.1, "Status": "2027 Target"},
+        {"Slot": "Support Seam", "Player": "Tushar Deshpande (RR 2026)", "Value": 12.26, "Status": "2026 Outgoing"},
+        {"Slot": "Support Seam", "Player": "Corbin Bosch", "Value": 8.37, "Status": "2027 Target"},
+        {"Slot": "Support Seam", "Player": "Gurjapneet Singh", "Value": 8.48, "Status": "2027 Target"}
+    ])
+
+    u1, u2 = st.columns(2)
+    with u1:
+        fig_u1 = px.bar(
+            upgrade_df[upgrade_df['Slot'] == "Finishing Battery"],
+            x='Player', y='Value', color='Status', text='Value',
+            color_discrete_map={'2026 Outgoing': '#94A3B8', '2027 Target': '#E51A7A'},
+            title="Finishing Upgrade: High-Pressure Strike Rate (Higher is Better)",
+            labels={'Value': 'Strike Rate'}
+        )
+        fig_u1.update_traces(textposition='outside', marker_line_width=0)
+        st.plotly_chart(style_chart(fig_u1, 330), use_container_width=True)
+
+    with u2:
+        fig_u2 = px.bar(
+            upgrade_df[upgrade_df['Slot'] == "Support Seam"],
+            x='Player', y='Value', color='Status', text='Value',
+            color_discrete_map={'2026 Outgoing': '#94A3B8', '2027 Target': '#17316B'},
+            title="Support Seam Upgrade: High-Pressure Economy (Lower is Better)",
+            labels={'Value': 'Economy Rate'}
+        )
+        fig_u2.update_traces(textposition='outside', marker_line_width=0)
+        st.plotly_chart(style_chart(fig_u2, 330), use_container_width=True)
+
+with tab2:
+    g1, g2 = st.columns(2)
+    with g1:
+        fig_bat_p = px.bar(
+            bat_p, x='phase', y='Run Rate', color='Team', barmode='group', text='Run Rate',
+            color_discrete_map={'Rajasthan Royals': '#E51A7A', 'IPL 2026 League Avg': '#94A3B8'},
+            title="IPL 2026 Batting Run Rate by Phase vs. League Avg",
+            category_orders={'phase': ['Powerplay (1-6)', 'Middle (7-15)', 'Death (16-20)']}
+        )
+        fig_bat_p.update_traces(textposition='outside', marker_line_width=0)
+        st.plotly_chart(style_chart(fig_bat_p, 340), use_container_width=True)
+
+    with g2:
+        fig_bowl_p = px.bar(
+            bowl_p, x='phase', y='Dot %', color='Bowl_Team', barmode='group', text='Dot %',
+            color_discrete_map={'Rajasthan Royals': '#17316B', 'IPL 2026 League Avg': '#94A3B8'},
+            title="IPL 2026 Bowling Dot-Ball % by Phase vs. League Avg",
+            category_orders={'phase': ['Powerplay (1-6)', 'Middle (7-15)', 'Death (16-20)']}
+        )
+        fig_bowl_p.update_traces(textposition='outside', marker_line_width=0)
+        st.plotly_chart(style_chart(fig_bowl_p, 340), use_container_width=True)
 
     c_bat, c_bowl = st.columns(2)
     with c_bat:
-        st.markdown("**RR IPL 2026 Batting Output**")
+        st.markdown('<div class="table-head-bar"><span class="table-head-title">RR IPL 2026 Batting Output</span><span class="tag-pink">9W – 7L</span></div>', unsafe_allow_html=True)
         st.dataframe(
             rr_bat26,
             use_container_width=True,
             hide_index=True,
+            height=340,
             column_config={
                 "SR": st.column_config.NumberColumn("Strike Rate", format="%.1f"),
-                "Runs": st.column_config.ProgressColumn("Total Runs", min_value=0, max_value=int(rr_bat26['Runs'].max()), format="%d"),
+                "Runs": st.column_config.ProgressColumn("Runs", min_value=0, max_value=int(rr_bat26['Runs'].max()), format="%d"),
                 "Balls": st.column_config.NumberColumn("Balls", format="%d")
             }
         )
 
     with c_bowl:
-        st.markdown("**RR IPL 2026 Bowling Output**")
+        st.markdown('<div class="table-head-bar"><span class="table-head-title">RR IPL 2026 Bowling Output</span><span class="tag-navy">9W – 7L</span></div>', unsafe_allow_html=True)
         st.dataframe(
             rr_bowl26,
             use_container_width=True,
             hide_index=True,
+            height=340,
             column_config={
                 "Econ": st.column_config.NumberColumn("Economy", format="%.2f"),
                 "Wkts": st.column_config.ProgressColumn("Wickets", min_value=0, max_value=int(rr_bowl26['Wkts'].max()), format="%d"),
@@ -821,35 +849,10 @@ with tab1:
             }
         )
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-
-    g1, g2 = st.columns(2)
-    with g1:
-        fig_bat_p = px.bar(
-            bat_p, x='phase', y='Run Rate', color='Team', barmode='group', text='Run Rate',
-            color_discrete_map={'Rajasthan Royals': '#E8127D', 'IPL 2026 League Avg': '#253E68'},
-            title="Batting Run Rate by Phase: RR vs. IPL 2026 League Benchmark",
-            category_orders={'phase': ['Powerplay (1-6)', 'Middle (7-15)', 'Death (16-20)']}
-        )
-        fig_bat_p.update_traces(textposition='outside', marker_line_width=0, textfont=dict(color='#F8FAFC'))
-        st.plotly_chart(style_chart(fig_bat_p, 380), use_container_width=True)
-
-    with g2:
-        fig_bowl_p = px.bar(
-            bowl_p, x='phase', y='Dot %', color='Bowl_Team', barmode='group', text='Dot %',
-            color_discrete_map={'Rajasthan Royals': '#E8127D', 'IPL 2026 League Avg': '#253E68'},
-            title="Bowling Dot-Ball % by Phase: RR vs. IPL 2026 League Benchmark",
-            category_orders={'phase': ['Powerplay (1-6)', 'Middle (7-15)', 'Death (16-20)']}
-        )
-        fig_bowl_p.update_traces(textposition='outside', marker_line_width=0, textfont=dict(color='#F8FAFC'))
-        st.plotly_chart(style_chart(fig_bowl_p, 380), use_container_width=True)
-
-with tab2:
-    st.markdown('<div class="section-title">Batting Pressure Reliability Score (BPRS Leaderboard)</div>', unsafe_allow_html=True)
-
+with tab3:
     role_choice = st.radio(
-        "Role Filter:",
-        ["All Qualified Batters", "Middle & Lower-Order Finishers (Pos ≥ 4.5)", "Top-Order (Pos < 4.5)"],
+        "Filter Batting Position:",
+        ["All Qualified Batters", "Finishers & Lower-Middle Order (Avg Pos ≥ 4.5)", "Top-Order Batters (Avg Pos < 4.5)"],
         horizontal=True
     )
 
@@ -859,6 +862,9 @@ with tab2:
     elif "Top-Order" in role_choice:
         bat_view = bat_view[bat_view['avg_bat_order'] < 4.5]
 
+    if player_search.strip():
+        bat_view = bat_view[bat_view['player_name'].str.contains(player_search.strip(), case=False, na=False)]
+
     bat_sorted = bat_view.sort_values('BPRS', ascending=False)
 
     disp_bat = bat_sorted[[
@@ -866,109 +872,85 @@ with tab2:
         'hp_sr', 'hp_rec_sr', 'hp_bpd', 'hp_bnd_pct', 'death_sr', 'chase_sr', 'coll_sr', 'BPRS'
     ]].rename(columns={
         'player_name': 'Player', 'category': 'Pool', 'ipl_2026_team': '2026 Team',
-        'avg_bat_order': 'Pos', 'hp_balls': 'HP Balls', 'hp_runs': 'HP Runs',
-        'hp_sr': 'HP SR', 'hp_rec_sr': 'Rec SR', 'hp_bpd': 'Balls/Out',
-        'hp_bnd_pct': 'Bnd %', 'death_sr': 'Death SR', 'chase_sr': 'Chase SR', 'coll_sr': 'Collapse SR'
+        'avg_bat_order': 'Avg Pos', 'hp_balls': 'Pressure Balls', 'hp_runs': 'Pressure Runs',
+        'hp_sr': 'Pressure SR', 'hp_rec_sr': 'Recency SR', 'hp_bpd': 'Balls/Out',
+        'hp_bnd_pct': 'Boundary %', 'death_sr': 'Death SR', 'chase_sr': 'Chase SR', 'coll_sr': 'Collapse SR'
     }).round(1)
 
     st.dataframe(
         disp_bat,
         use_container_width=True,
         hide_index=True,
-        height=390,
+        height=360,
         column_config={
-            "BPRS": st.column_config.ProgressColumn("BPRS Score", min_value=0, max_value=100, format="%.1f"),
-            "HP SR": st.column_config.NumberColumn("HP SR", format="%.1f"),
+            "BPRS": st.column_config.ProgressColumn("BPRS (0–100)", min_value=0, max_value=100, format="%.1f"),
+            "Pressure SR": st.column_config.NumberColumn("Pressure SR", format="%.1f"),
             "Death SR": st.column_config.NumberColumn("Death SR", format="%.1f"),
             "Balls/Out": st.column_config.NumberColumn("Balls/Out", format="%.1f"),
-            "Bnd %": st.column_config.NumberColumn("Bnd %", format="%.1f%%")
+            "Boundary %": st.column_config.NumberColumn("Boundary %", format="%.1f%%")
         }
     )
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-
-    fig_bat = px.scatter(
-        bat_sorted.head(30),
-        x='hp_bpd', y='hp_sr', size='hp_balls', color='category',
-        hover_name='player_name',
-        hover_data={'ipl_2026_team': True, 'BPRS': ':.1f', 'death_sr': ':.1f'},
-        text='player_name',
-        color_discrete_map={
-            'India': '#E8127D',
-            'Overseas (IPL-Eligible)': '#D4AF37',
-            'Pakistan (Ineligible)': '#475569'
-        },
-        labels={'hp_bpd': 'Wicket Preservation (Balls per Dismissal under Pressure)', 'hp_sr': 'High-Pressure Strike Rate'},
-        title="Top 30 Clutch Batters: Strike Rate vs. Wicket Preservation (Top-Right = Elite Outliers)"
-    )
-    fig_bat.update_traces(textposition='top center', textfont=dict(size=10, color='#CBD5E1'), marker=dict(opacity=0.9, line=dict(width=1, color='#070D18')))
-    st.plotly_chart(style_chart(fig_bat, 480), use_container_width=True)
+    if len(bat_sorted) > 0:
+        fig_bat = px.scatter(
+            bat_sorted.head(30),
+            x='hp_bpd', y='hp_sr', size='hp_balls', color='category',
+            hover_name='player_name',
+            hover_data={'ipl_2026_team': True, 'BPRS': ':.1f', 'death_sr': ':.1f'},
+            text='player_name',
+            color_discrete_map={
+                'India': '#E51A7A',
+                'Overseas (IPL-Eligible)': '#17316B',
+                'Pakistan (Ineligible)': '#94A3B8'
+            },
+            labels={'hp_bpd': 'Wicket Preservation (Balls per Dismissal under Pressure)', 'hp_sr': 'High-Pressure Strike Rate'},
+            title="Top 30 Batters: Strike Rate vs. Wicket Preservation (Top-Right = Ideal Finishers)"
+        )
+        fig_bat.update_traces(textposition='top center', textfont=dict(size=10, color='#334155'), marker=dict(opacity=0.88))
+        st.plotly_chart(style_chart(fig_bat, 420), use_container_width=True)
 
     sc1, sc2 = st.columns(2)
     with sc1:
         st.markdown("""
-<div class="scout-card">
-<div class="scout-header">
-<div>
-<div class="scout-name">Shashank Singh</div>
-<div class="scout-meta">PBKS (2026) · Right-Hand Middle/Death Finisher (#5–6)</div>
+<div class="panel-card">
+<div class="card-top">
+<div><div class="card-name">Shashank Singh</div><div class="card-role">PBKS (2026) · Right-Hand Finisher (#5–6) · India</div></div>
+<span class="tag-pink">78.3 BPRS (#1 IND)</span>
 </div>
-<span class="pill-tag-pink">78.3 BPRS (#1 IND)</span>
-</div>
-<div class="scout-grid">
-<div class="scout-metric">
-<div class="scout-metric-label">High-Pressure SR</div>
-<div class="scout-metric-val" style="color:#FF4D9E;">182.8</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Death Overs SR</div>
-<div class="scout-metric-val" style="color:#FF4D9E;">195.4</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Balls / Dismissal</div>
-<div class="scout-metric-val">26.2</div>
-</div>
+<div class="stat-grid">
+<div class="stat-cell"><div class="stat-lbl">Pressure SR</div><div class="stat-val">182.8</div></div>
+<div class="stat-cell"><div class="stat-lbl">Death SR</div><div class="stat-val">195.4</div></div>
+<div class="stat-cell"><div class="stat-lbl">Balls / Out</div><div class="stat-val">26.2</div></div>
 </div>
 </div>
 """, unsafe_allow_html=True)
 
     with sc2:
         st.markdown("""
-<div class="scout-card">
-<div class="scout-header">
-<div>
-<div class="scout-name">Naman Dhir</div>
-<div class="scout-meta">MI (2026) · RHB / Auxiliary Off-Spin (#5)</div>
+<div class="panel-card">
+<div class="card-top">
+<div><div class="card-name">Naman Dhir</div><div class="card-role">MI (2026) · RHB / Part-Time Off-Spin (#5) · India</div></div>
+<span class="tag-pink">73.7 BPRS (#2 IND)</span>
 </div>
-<span class="pill-tag-pink">73.7 BPRS (#2 IND)</span>
-</div>
-<div class="scout-grid">
-<div class="scout-metric">
-<div class="scout-metric-label">High-Pressure SR</div>
-<div class="scout-metric-val" style="color:#FF4D9E;">201.1</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Boundary %</div>
-<div class="scout-metric-val" style="color:#FF4D9E;">30.8%</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Collapse Rescue SR</div>
-<div class="scout-metric-val">174.5</div>
-</div>
+<div class="stat-grid">
+<div class="stat-cell"><div class="stat-lbl">Pressure SR</div><div class="stat-val">201.1</div></div>
+<div class="stat-cell"><div class="stat-lbl">Boundary %</div><div class="stat-val">30.8%</div></div>
+<div class="stat-cell"><div class="stat-lbl">Collapse SR</div><div class="stat-val">174.5</div></div>
 </div>
 </div>
 """, unsafe_allow_html=True)
 
-with tab3:
-    st.markdown('<div class="section-title">Bowling Pressure Reliability Score (BWPRS Leaderboard)</div>', unsafe_allow_html=True)
-
-    bowl_type_filter = st.radio("Discipline Filter:", ["All Bowlers", "Pace / Seam", "Spin"], horizontal=True)
+with tab4:
+    bowl_type_filter = st.radio("Filter Bowling Discipline:", ["All Bowlers", "Pace / Seam", "Spin"], horizontal=True)
 
     bowl_view = bowl_qual
     if bowl_type_filter == "Pace / Seam":
         bowl_view = bowl_view[bowl_view['bowling_type'].str.contains('fast|medium', case=False, na=False)]
     elif bowl_type_filter == "Spin":
         bowl_view = bowl_view[~bowl_view['bowling_type'].str.contains('fast|medium', case=False, na=False)]
+
+    if player_search.strip():
+        bowl_view = bowl_view[bowl_view['player_name'].str.contains(player_search.strip(), case=False, na=False)]
 
     bowl_sorted = bowl_view.sort_values('BWPRS', ascending=False)
 
@@ -977,8 +959,8 @@ with tab3:
         'hp_econ', 'hp_rec_econ', 'hp_sr', 'hp_dot_pct', 'death_econ', 'death_sr', 'BWPRS'
     ]].rename(columns={
         'player_name': 'Player', 'category': 'Pool', 'ipl_2026_team': '2026 Team',
-        'bowling_type': 'Style', 'hp_balls': 'HP Balls', 'hp_wkts': 'HP Wkts',
-        'hp_econ': 'HP Econ', 'hp_rec_econ': 'Rec Econ', 'hp_sr': 'HP SR',
+        'bowling_type': 'Style', 'hp_balls': 'Pressure Balls', 'hp_wkts': 'Pressure Wkts',
+        'hp_econ': 'Pressure Econ', 'hp_rec_econ': 'Recency Econ', 'hp_sr': 'Pressure SR',
         'hp_dot_pct': 'Dot %', 'death_econ': 'Death Econ', 'death_sr': 'Death SR'
     }).round(2)
 
@@ -986,203 +968,98 @@ with tab3:
         disp_bowl,
         use_container_width=True,
         hide_index=True,
-        height=390,
+        height=360,
         column_config={
-            "BWPRS": st.column_config.ProgressColumn("BWPRS Score", min_value=0, max_value=100, format="%.1f"),
-            "HP Econ": st.column_config.NumberColumn("HP Econ", format="%.2f"),
+            "BWPRS": st.column_config.ProgressColumn("BWPRS (0–100)", min_value=0, max_value=100, format="%.1f"),
+            "Pressure Econ": st.column_config.NumberColumn("Pressure Econ", format="%.2f"),
             "Death Econ": st.column_config.NumberColumn("Death Econ", format="%.2f"),
             "Dot %": st.column_config.NumberColumn("Dot %", format="%.1f%%")
         }
     )
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-
-    fig_bowl = px.scatter(
-        bowl_sorted.head(30),
-        x='hp_econ', y='hp_sr', size='hp_balls', color='category',
-        hover_name='player_name',
-        hover_data={'ipl_2026_team': True, 'BWPRS': ':.1f', 'death_econ': ':.2f'},
-        text='player_name',
-        color_discrete_map={
-            'India': '#E8127D',
-            'Overseas (IPL-Eligible)': '#D4AF37',
-            'Pakistan (Ineligible)': '#475569'
-        },
-        labels={'hp_econ': 'High-Pressure Economy (Inverted: Right = Lower Economy)', 'hp_sr': 'High-Pressure Bowling SR (Inverted: Top = Faster Wickets)'},
-        title="Top 30 Bowlers: Economy Rate vs. Strike Rate (Top-Right = Elite Enforcers)"
-    )
-    fig_bowl.update_traces(textposition='top center', textfont=dict(size=10, color='#CBD5E1'), marker=dict(opacity=0.9, line=dict(width=1, color='#070D18')))
-    fig_bowl.update_yaxes(autorange="reversed")
-    fig_bowl.update_xaxes(autorange="reversed")
-    st.plotly_chart(style_chart(fig_bowl, 480), use_container_width=True)
+    if len(bowl_sorted) > 0:
+        fig_bowl = px.scatter(
+            bowl_sorted.head(30),
+            x='hp_econ', y='hp_sr', size='hp_balls', color='category',
+            hover_name='player_name',
+            hover_data={'ipl_2026_team': True, 'BWPRS': ':.1f', 'death_econ': ':.2f'},
+            text='player_name',
+            color_discrete_map={
+                'India': '#E51A7A',
+                'Overseas (IPL-Eligible)': '#17316B',
+                'Pakistan (Ineligible)': '#94A3B8'
+            },
+            labels={'hp_econ': 'High-Pressure Economy (Right = More Economical)', 'hp_sr': 'High-Pressure Strike Rate (Top = Faster Wickets)'},
+            title="Top 30 Bowlers: Economy Rate vs. Strike Rate (Top-Right = Elite Enforcers)"
+        )
+        fig_bowl.update_traces(textposition='top center', textfont=dict(size=10, color='#334155'), marker=dict(opacity=0.88))
+        fig_bowl.update_yaxes(autorange="reversed")
+        fig_bowl.update_xaxes(autorange="reversed")
+        st.plotly_chart(style_chart(fig_bowl, 420), use_container_width=True)
 
     bd1, bd2 = st.columns(2)
     with bd1:
         st.markdown("""
-<div class="scout-card">
-<div class="scout-header">
-<div>
-<div class="scout-name">Corbin Bosch</div>
-<div class="scout-meta">MI (2026) · Right-Arm Fast-Medium All-Rounder (SA)</div>
+<div class="panel-card">
+<div class="card-top">
+<div><div class="card-name">Corbin Bosch</div><div class="card-role">MI (2026) · Right-Arm Fast-Medium All-Rounder · South Africa</div></div>
+<span class="tag-navy">73.0 BWPRS (#2 Pace)</span>
 </div>
-<span class="pill-tag-gold">73.0 BWPRS (#2 Pace)</span>
-</div>
-<div class="scout-grid">
-<div class="scout-metric">
-<div class="scout-metric-label">High-Pressure Econ</div>
-<div class="scout-metric-val" style="color:#F1D278;">8.37</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Dot Ball %</div>
-<div class="scout-metric-val" style="color:#F1D278;">49.7%</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Death Overs Econ</div>
-<div class="scout-metric-val">9.12</div>
-</div>
+<div class="stat-grid">
+<div class="stat-cell"><div class="stat-lbl">Pressure Econ</div><div class="stat-val">8.37</div></div>
+<div class="stat-cell"><div class="stat-lbl">Dot Ball %</div><div class="stat-val">49.7%</div></div>
+<div class="stat-cell"><div class="stat-lbl">Death Econ</div><div class="stat-val">9.12</div></div>
 </div>
 </div>
 """, unsafe_allow_html=True)
 
     with bd2:
         st.markdown("""
-<div class="scout-card">
-<div class="scout-header">
-<div>
-<div class="scout-name">Mujeeb Ur Rahman</div>
-<div class="scout-meta">Free Agent (2026) · Mystery Off-Spin / Carrom (AFG)</div>
+<div class="panel-card">
+<div class="card-top">
+<div><div class="card-name">Mujeeb Ur Rahman</div><div class="card-role">Free Agent (2026) · Powerplay & Middle Off-Spin · Afghanistan</div></div>
+<span class="tag-navy">69.8 BWPRS (#1 Spin)</span>
 </div>
-<span class="pill-tag-gold">69.8 BWPRS (#1 Spin Target)</span>
-</div>
-<div class="scout-grid">
-<div class="scout-metric">
-<div class="scout-metric-label">High-Pressure Econ</div>
-<div class="scout-metric-val" style="color:#F1D278;">7.76</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Bowling SR</div>
-<div class="scout-metric-val" style="color:#F1D278;">16.8</div>
-</div>
-<div class="scout-metric">
-<div class="scout-metric-label">Dot Ball %</div>
-<div class="scout-metric-val">42.4%</div>
-</div>
+<div class="stat-grid">
+<div class="stat-cell"><div class="stat-lbl">Pressure Econ</div><div class="stat-val">7.76</div></div>
+<div class="stat-cell"><div class="stat-lbl">Bowling SR</div><div class="stat-val">16.8</div></div>
+<div class="stat-cell"><div class="stat-lbl">Dot Ball %</div><div class="stat-val">42.4%</div></div>
 </div>
 </div>
 """, unsafe_allow_html=True)
-
-with tab4:
-    st.markdown('<div class="section-title">IPL 2027 Auction Target Matrix & Projected Playing XII</div>', unsafe_allow_html=True)
-
-    st.markdown("""
-<div class="quota-box">
-<div class="quota-title">
-<span>🛡️ OVERSEAS REGISTRATION ALLOCATION</span>
-<span class="pill-tag-pink">4 / 4 SLOTS ACCOUNTED</span>
-</div>
-<div class="quota-chips">
-<span class="quota-chip quota-chip-locked">OS #1: Donovan Ferreira (Retained Finisher)</span>
-<span class="quota-chip quota-chip-target">OS #2: Corbin Bosch / Jamie Overton (Target Seamer)</span>
-<span class="quota-chip quota-chip-locked">OS #3: Jofra Archer (Retained Spearhead)</span>
-<span class="quota-chip quota-chip-target">OS #4: Mujeeb Ur Rahman / Impact Sub (Target Spinner)</span>
-</div>
-</div>
-""", unsafe_allow_html=True)
-
-    c_left, c_right = st.columns([1.1, 1])
-    with c_left:
-        st.markdown("**Auction Target Shortlist**")
-        targets_df = pd.DataFrame([
-            {"Tier": "Tier 1", "Target": "Shashank Singh", "Pool": "IND", "Team": "PBKS", "Role": "Finisher (#5–6)", "Profile": "78.3 BPRS · 182.8 HP SR · 26.2 BPD"},
-            {"Tier": "Tier 1", "Target": "Naman Dhir", "Pool": "IND", "Team": "MI", "Role": "Finisher / Off-Spin", "Profile": "73.7 BPRS · 201.1 HP SR · 30.8% Bnd%"},
-            {"Tier": "Tier 1", "Target": "Corbin Bosch", "Pool": "OS (SA)", "Team": "MI", "Role": "Death Pace All-Rounder", "Profile": "73.0 BWPRS · 8.37 Econ · 49.7% Dots"},
-            {"Tier": "Tier 1", "Target": "Jamie Overton", "Pool": "OS (ENG)", "Team": "CSK", "Role": "Death Seamer / Hitter", "Profile": "67.3 BWPRS · 7.48 HP SR · 6.85 Death SR"},
-            {"Tier": "Tier 1", "Target": "Mujeeb Ur Rahman", "Pool": "OS (AFG)", "Team": "Free Agent", "Role": "PP & Middle Spin", "Profile": "69.8 BWPRS · 7.76 Econ · 42.4% Dots"},
-            {"Tier": "Tier 2", "Target": "Gurjapneet Singh", "Pool": "IND", "Team": "CSK", "Role": "Left-Arm Pace", "Profile": "64.6 BWPRS · 8.48 Econ · 8.88 Death Econ"},
-            {"Tier": "Tier 2", "Target": "Cooper Connolly", "Pool": "OS (AUS)", "Team": "PBKS", "Role": "LHB Middle / SLA Spin", "Profile": "67.2 BPRS · 176.9 HP SR · 237.8 Death SR"}
-        ])
-        st.dataframe(targets_df, use_container_width=True, hide_index=True)
-
-    with c_right:
-        st.markdown("**Projected IPL 2027 Playing XII (With Impact Sub)**")
-        xii_df = pd.DataFrame([
-            {"#": 1, "Player": "Yashasvi Jaiswal", "Status": "RETAINED (IND)", "Role": "LHB Opener (152.5 SR)"},
-            {"#": 2, "Player": "Vaibhav Sooryavanshi", "Status": "RETAINED (IND)", "Role": "LHB Opener (776 runs @ 237.3 SR)"},
-            {"#": 3, "Player": "Riyan Parag", "Status": "RETAINED (IND)", "Role": "RHB Anchor / Spin (157.7 SR)"},
-            {"#": 4, "Player": "Dhruv Jurel (WK)", "Status": "RETAINED (IND)", "Role": "RHB / Wicketkeeper (515 runs @ 154.7 SR)"},
-            {"#": 5, "Player": "Naman Dhir", "Status": "BUY TARGET (IND)", "Role": "RHB / Off-Spin (201.1 HP SR)"},
-            {"#": 6, "Player": "Shashank Singh", "Status": "BUY TARGET (IND)", "Role": "RHB Finisher (195.4 Death SR)"},
-            {"#": 7, "Player": "Donovan Ferreira", "Status": "RETAINED (OS #1)", "Role": "RHB Death Hitter (179.1 SR)"},
-            {"#": 8, "Player": "Ravindra Jadeja", "Status": "RETAINED (IND)", "Role": "LHB / SLA Spin (8.58 Econ)"},
-            {"#": 9, "Player": "Corbin Bosch / Overton", "Status": "BUY TARGET (OS #2)", "Role": "Death Pace All-Rounder (8.37 Econ)"},
-            {"#": 10, "Player": "Jofra Archer", "Status": "RETAINED (OS #3)", "Role": "Pace Spearhead (25 Wkts @ 9.43)"},
-            {"#": 11, "Player": "Ravi Bishnoi", "Status": "RETAINED (IND)", "Role": "Leg-Break Strike Spinner"},
-            {"#": 12, "Player": "Gurjapneet / Mujeeb (OS #4)", "Status": "IMPACT SUB", "Role": "Left-Arm Pace or Mystery Spin Matchup"}
-        ])
-        st.dataframe(xii_df, use_container_width=True, hide_index=True)
-
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-
-    upgrade_df = pd.DataFrame([
-        {"Slot": "Finishing Battery (#5–6)", "Player": "Shimron Hetmyer (RR 2026)", "Value": 113.0, "Type": "2026 Outgoing"},
-        {"Slot": "Finishing Battery (#5–6)", "Player": "Shashank Singh", "Value": 182.8, "Type": "2027 Target"},
-        {"Slot": "Finishing Battery (#5–6)", "Player": "Naman Dhir", "Value": 201.1, "Type": "2027 Target"},
-        {"Slot": "Support Seam Attack", "Player": "Tushar Deshpande (RR 2026)", "Value": 12.26, "Type": "2026 Outgoing"},
-        {"Slot": "Support Seam Attack", "Player": "Corbin Bosch", "Value": 8.37, "Type": "2027 Target"},
-        {"Slot": "Support Seam Attack", "Player": "Gurjapneet Singh", "Value": 8.48, "Type": "2027 Target"}
-    ])
-
-    u1, u2 = st.columns(2)
-    with u1:
-        fig_u1 = px.bar(
-            upgrade_df[upgrade_df['Slot'] == "Finishing Battery (#5–6)"],
-            x='Player', y='Value', color='Type', text='Value',
-            color_discrete_map={'2026 Outgoing': '#253E68', '2027 Target': '#E8127D'},
-            title="Finishing Upgrade: High-Pressure Strike Rate (2026 vs 2027 Targets)",
-            labels={'Value': 'Strike Rate'}
-        )
-        fig_u1.update_traces(textposition='outside', marker_line_width=0, textfont=dict(color='#F8FAFC'))
-        st.plotly_chart(style_chart(fig_u1, 350), use_container_width=True)
-
-    with u2:
-        fig_u2 = px.bar(
-            upgrade_df[upgrade_df['Slot'] == "Support Seam Attack"],
-            x='Player', y='Value', color='Type', text='Value',
-            labels={'Value': 'Economy Rate'},
-            color_discrete_map={'2026 Outgoing': '#253E68', '2027 Target': '#D4AF37'},
-            title="Bowling Upgrade: High-Pressure Economy Rate (Lower = Better)",
-        )
-        fig_u2.update_traces(textposition='outside', marker_line_width=0, textfont=dict(color='#F8FAFC'))
-        st.plotly_chart(style_chart(fig_u2, 350), use_container_width=True)
 
 with tab5:
-    st.markdown('<div class="section-title">Underlying Datasets & Delivery Pressure Index (DPI) Formulation</div>', unsafe_allow_html=True)
+    st.markdown('<div class="table-head-bar"><span class="table-head-title">Delivery Pressure Index (DPI) Scoring Formulation</span><span class="tag-navy">0 – 100 Scale</span></div>', unsafe_allow_html=True)
+    st.caption("Each delivery (200,999 total across 867 T20 matches) receives an additive 0–100 pressure score. Deliveries above the threshold feed into recency-weighted BPRS and BWPRS rankings.")
 
-    ref_df = pd.DataFrame([
-        {"Data Source": "ball_by_ball.csv", "Deliveries / Rows": "200,999", "Dimensions": 33, "Join Keys": "match_id, striker_id, bowler_id", "Analytical Role": "Delivery runs, extras, dismissals, phase, bowling style"},
-        {"Data Source": "matches.csv", "Deliveries / Rows": "883", "Dimensions": 22, "Join Keys": "match_id, comp_id, win_team_id", "Analytical Role": "Dates, match stages, knockout flags, DLS target revisions"},
-        {"Data Source": "competitions.csv", "Deliveries / Rows": "141", "Dimensions": 4, "Join Keys": "comp_id", "Analytical Role": "Seasons (2022–2026) and tournament format segregation"},
-        {"Data Source": "playing_eleven.csv", "Deliveries / Rows": "28,381", "Dimensions": 9, "Join Keys": "match_id, team_id, player_id", "Analytical Role": "Batting position tracking and Impact Sub tracking"},
-        {"Data Source": "competition_team_player_mapping.csv", "Deliveries / Rows": "6,413", "Dimensions": 6, "Join Keys": "comp_id, team_id, player_id", "Analytical Role": "Master player names and franchise rosters"},
-        {"Data Source": "teams.csv", "Deliveries / Rows": "353", "Dimensions": 3, "Join Keys": "comp_id, team_id", "Analytical Role": "Franchise and international team identifiers"}
-    ])
-    st.dataframe(ref_df, use_container_width=True, hide_index=True)
+    m1, m2 = st.columns([1, 1.1])
+    with m1:
+        dpi_rules = pd.DataFrame([
+            {"Leverage Trigger": "Death Overs", "Points": "+30", "Match Condition": "Overs 16.1 through 20.0 in either innings"},
+            {"Leverage Trigger": "Steep Run Chase", "Points": "+30", "Match Condition": "2nd inn RRR ≥ 10.5 or (Overs ≥ 15 & 8.5 ≤ RRR ≤ 18.0)"},
+            {"Leverage Trigger": "Collapse Mitigation", "Points": "+25", "Match Condition": "≥ 2 wkts in PP, ≥ 3 by Over 10, or ≥ 5 wkts down"},
+            {"Leverage Trigger": "Knockout Stakes", "Points": "+20", "Match Condition": "Finals, Qualifiers, Eliminators, Semi-Finals, Super 4"},
+            {"Leverage Trigger": "Bowling Under Siege", "Points": "+15", "Match Condition": "Overs 7–20 after conceding ≥ 60 runs in Powerplay"}
+        ])
+        st.dataframe(dpi_rules, use_container_width=True, hide_index=True, height=230)
 
-    st.markdown("**DPI 5-Factor Leverage Additive Points**")
-    dpi_rules = pd.DataFrame([
-        {"Condition": "Death Overs", "Points": "+30 PTS", "Analytical Trigger": "Overs 16.1 through 20.0 in either innings"},
-        {"Condition": "High-RRR Chase", "Points": "+30 PTS", "Analytical Trigger": "Innings 2 with RRR ≥ 10.5 or (Overs ≥ 15 with 8.5 ≤ RRR ≤ 18.0)"},
-        {"Condition": "Collapse Mitigation", "Points": "+25 PTS", "Analytical Trigger": "≥ 2 wickets in Powerplay, ≥ 3 wickets by Over 10, or ≥ 5 wickets down"},
-        {"Condition": "Knockout Stakes", "Points": "+20 PTS", "Analytical Trigger": "Finals, Qualifiers, Eliminators, Semi-Finals, Super 4s"},
-        {"Condition": "Bowling Siege", "Points": "+15 PTS", "Analytical Trigger": "Bowling in Overs 7–20 after conceding ≥ 60 runs in the Powerplay"}
-    ])
-    st.dataframe(dpi_rules, use_container_width=True, hide_index=True)
+    with m2:
+        fig_dpi = px.bar(
+            dpi_dist, x='dpi', y='Deliveries', color='Regime',
+            color_discrete_map={f'High Pressure (DPI ≥ {dpi_threshold})': '#E51A7A', 'Standard Leverage': '#CBD5E1'},
+            labels={'dpi': 'DPI Score (0–100)', 'Deliveries': 'Deliveries'},
+            title="Delivery Count by DPI Pressure Score"
+        )
+        fig_dpi.update_traces(marker_line_width=0)
+        st.plotly_chart(style_chart(fig_dpi, 250), use_container_width=True)
 
-    fig_dpi = px.bar(
-        dpi_dist, x='dpi', y='Deliveries', color='Regime',
-        color_discrete_map={f'High Pressure (DPI ≥ {dpi_threshold})': '#E8127D', 'Standard Leverage': '#182642'},
-        labels={'dpi': 'DPI Score', 'Deliveries': 'Number of Deliveries'},
-        title="DPI Leverage Distribution Across 200,999 Deliveries"
-    )
-    fig_dpi.update_traces(marker_line_width=0)
-    st.plotly_chart(style_chart(fig_dpi, 320), use_container_width=True)
+    with st.expander("View Source Tables & Relational Join Keys (6 Source Datasets)"):
+        ref_df = pd.DataFrame([
+            {"Table": "ball_by_ball.csv", "Rows": "200,999", "Keys": "match_id, striker_id, bowler_id", "Role": "Delivery runs, extras, dismissals, phase, bowling type"},
+            {"Table": "matches.csv", "Rows": "883", "Keys": "match_id, comp_id, win_team_id", "Role": "Match stages, knockout flags, DLS target revisions"},
+            {"Table": "competitions.csv", "Rows": "141", "Keys": "comp_id", "Role": "Seasons (2022–2026) and tournament format mapping"},
+            {"Table": "playing_eleven.csv", "Rows": "28,381", "Keys": "match_id, team_id, player_id", "Role": "Batting order positions and Impact Sub appearances"},
+            {"Table": "competition_team_player_mapping.csv", "Rows": "6,413", "Keys": "comp_id, team_id, player_id", "Role": "Franchise rosters and player eligibility classification"},
+            {"Table": "teams.csv", "Rows": "353", "Keys": "comp_id, team_id", "Role": "Team identifiers"}
+        ])
+        st.dataframe(ref_df, use_container_width=True, hide_index=True)
