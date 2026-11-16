@@ -9,23 +9,33 @@ jobs:
   wake:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps
+
       - name: Wake or Ping Streamlit App
         run: |
-          npx --yes playwright@latest install chromium
-          node -e '
-            const { chromium } = require("playwright");
-            (async () => {
-              const browser = await chromium.launch();
-              const page = await browser.newPage();
-              await page.goto("https://rajasthanroyalsauctioncb.streamlit.app/", { waitUntil: "networkidle", timeout: 60000 });
-              const wakeBtn = page.getByRole("button", { name: /get this app back up/i });
-              if (await wakeBtn.isVisible().catch(() => false)) {
-                console.log("App was asleep — waking it up...");
-                await wakeBtn.click();
-                await page.waitForTimeout(20000);
-              } else {
-                console.log("App is already awake.");
-              }
-              await browser.close();
-            })();
+          python -c '
+          from playwright.sync_api import sync_playwright
+
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              page = browser.new_page()
+              page.goto("https://rajasthanroyalsauctioncb.streamlit.app/", wait_until="domcontentloaded", timeout=60000)
+              page.wait_for_timeout(5000)
+
+              wake_btn = page.get_by_role("button", name="Yes, get this app back up!")
+              if wake_btn.is_visible():
+                  print("App was asleep — clicking wake button...")
+                  wake_btn.click()
+                  page.wait_for_timeout(20000)
+              else:
+                  print("App is already awake!")
+
+              browser.close()
           '
